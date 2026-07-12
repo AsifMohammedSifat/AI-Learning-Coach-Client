@@ -1,0 +1,51 @@
+.auth-shell {
+  min-height: calc(100vh - 66px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+}
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.auth-sub {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin-bottom: 24px;
+}
+.auth-field {
+  margin-bottom: 16px;
+}
+.auth-label {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: block;
+}
+.auth-error {
+  color: var(--coral);
+  font-size: 12px;
+  margin-top: 6px;
+}
+.auth-footer {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.auth-footer a {
+  color: var(--accent);
+}

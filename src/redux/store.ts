@@ -36,7 +36,7 @@ export const store = configureStore({
     getDefaultMiddleware({
       // https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER], // to solve non serialize error
       },
     }).concat(baseApi.middleware),
 });

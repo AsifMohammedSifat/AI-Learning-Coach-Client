@@ -20,7 +20,29 @@ export type TUserPaths = {
 
 export type TJwtPayload = {
   userId: string;
-  role: "student" | "faculty" | "admin";
-  iat: number;
-  exp: number;
+  role: "student" | "admin";
+  name: string;
+  email: string;
+  iat?: number;
+  exp?: number;
 };
+
+export type TProfileForm = {
+  name: string;
+  email: string;
+  avatar?: string;
+};
+
+export type TChangePasswordForm = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
+export type TMessage = {
+  id: string;
+  role: "user" | "assistant";
+  text: string;
+};
+
+export type TLanguage = "বাংলা" | "EN";
