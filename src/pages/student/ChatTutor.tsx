@@ -36,14 +36,13 @@ export default function ChatTutor() {
     }
   }, [messages, sending]);
 
-
   // go to page lower side
-useEffect(() => {
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: "smooth",
-  });
-}, []);
+  useEffect(() => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  }, []);
 
   const handleSend = async (text?: string) => {
     const value = (text ?? input).trim();
@@ -64,14 +63,20 @@ useEffect(() => {
 
     try {
       const res = await sendMessage({ message: value, language }).unwrap();
-      setMessages((prev) => [...prev, res.data]);
+      const aiMessage: TMessage = {
+        id: `ai-${Date.now()}`,
+        role: "assistant",
+        text: res.data,
+      };
+
+      setMessages((prev) => [...prev, aiMessage]);
     } catch {
       toast.error("Couldn't reach the tutor — try again");
     }
   };
 
   return (
-    <div style={{marginTop: "30px"}}>
+    <div style={{ marginTop: "30px" }}>
       <div className="eyebrow">Chat tutor</div>
       <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>
         Ask anything about your current topic

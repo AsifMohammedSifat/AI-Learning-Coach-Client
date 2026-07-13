@@ -5,7 +5,7 @@ export const chatApi = baseApi.injectEndpoints({
     sendChatMessage: builder.mutation({
       // body: { message, language, roadmapWeekContext }
       query: (body) => ({
-        url: "/chat",
+        url: "/chat-tutor",
         method: "POST",
         body,
       }),

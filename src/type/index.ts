@@ -44,5 +44,8 @@ export type TMessage = {
   role: "user" | "assistant";
   text: string;
 };
+export type TSingleMessage = {
+  text: string;
+};
 
 export type TLanguage = "বাংলা" | "EN";
