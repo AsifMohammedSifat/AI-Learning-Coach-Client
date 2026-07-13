@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Input, Button, Segmented, Skeleton } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-
 import "./Student.css";
 import {
   useGetChatHistoryQuery,
   useSendChatMessageMutation,
 } from "../../redux/api/features/chat/chatApi";
 import type { TLanguage, TMessage } from "../../type";
+import MarkdownMessage from "../../formatter/MarkdownMessage";
+import { Check, Copy } from "lucide-react";
 
 const suggestions = [
   "Binary search vs linear search?",
@@ -25,6 +26,17 @@ export default function ChatTutor() {
   const [messages, setMessages] = useState<TMessage[]>([]);
   const bodyRef = useRef<HTMLDivElement | null>(null);
 
+
+  // to add copy button in chat message
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyMessage = async (text:string) => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
+
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (historyData?.data) setMessages(historyData.data);
@@ -37,12 +49,12 @@ export default function ChatTutor() {
   }, [messages, sending]);
 
   // go to page lower side
-  useEffect(() => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
-  }, []);
+  // useEffect(() => {
+  //   window.scrollTo({
+  //     top: document.body.scrollHeight,
+  //     behavior: "smooth",
+  //   });
+  // }, []);
 
   const handleSend = async (text?: string) => {
     const value = (text ?? input).trim();
@@ -76,14 +88,14 @@ export default function ChatTutor() {
   };
 
   return (
-    <div style={{ marginTop: "30px" }}>
-      <div className="eyebrow">Chat tutor</div>
+    <div style={{ marginTop: "5px" }}>
+      {/* <div className="eyebrow">Chat tutor</div>
       <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>
         Ask anything about your current topic
       </h2>
       <p style={{ color: "var(--muted)", marginBottom: 20 }}>
         Context-aware answers, with code examples when useful.
-      </p>
+      </p> */}
 
       <div className="chat-shell">
         <div className="chat-topline">
@@ -138,7 +150,31 @@ export default function ChatTutor() {
                 className={`msg ${m.role === "user" ? "user" : "bot"}`}
                 key={m.id}
               >
-                <div className="msg-bubble">{m.text}</div>
+                <div className="msg-bubble">
+                  {/* <MarkdownMessage message={m.text} /> */}
+                  {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {m.text}
+                  </ReactMarkdown> */}
+
+                  <MarkdownMessage message={m.text} />
+
+                  {m.role === "assistant" && (
+                    <button
+                      className="msg-copy-btn"
+                      onClick={()=>handleCopyMessage(m.text)}
+                    >
+                      {copied ? (
+                        <>
+                          <Check size={14} /> Copied
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={14} />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             ))
           )}

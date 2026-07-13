@@ -1,0 +1,155 @@
+.md-content {
+  font-size: 15px;
+  line-height: 1.2;
+  color: #e6e6e6;
+  word-break: break-word;
+  overflow-x: scroll;
+}
+
+.md-content > *:first-child { margin-top: 0; }
+.md-content > *:last-child { margin-bottom: 0; }
+
+.md-content p {
+  margin: 0 0 12px;
+}
+
+.md-content h1,
+.md-content h2,
+.md-content h3 {
+  font-weight: 600;
+  margin: 20px 0 10px;
+  line-height: 1.0;
+}
+.md-content h1 { font-size: 1.5em; }
+.md-content h2 { font-size: 1.3em; }
+.md-content h3 { font-size: 1.1em; }
+
+.md-content ul,
+.md-content ol {
+  margin: 0 0 12px;
+  padding-left: 1.5em;
+}
+.md-content li { margin: 4px 0; }
+.md-content li > p { margin: 0; } /* avoid extra gap inside list items */
+
+.md-content blockquote {
+  border-left: 3px solid #f5a623; /* amber, matches your theme */
+  margin: 12px 0;
+  padding: 4px 12px;
+  color: #b5b5b5;
+  background: rgba(245, 166, 35, 0.06);
+}
+
+.md-content a {
+  color: #f5a623;
+  text-decoration: underline;
+}
+
+.md-content hr {
+  border: none;
+  border-top: 1px solid #333;
+  margin: 16px 0;
+}
+
+.md-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.md-content th,
+.md-content td {
+  border: 1px solid #333;
+  padding: 6px 10px;
+  text-align: left;
+}
+.md-content th {
+  background: #1e1e1e;
+  font-weight: 600;
+}
+
+.md-content .inline-code {
+  background: #2b2b2b;
+  color: #f5a623;
+  font-family: "JetBrains Mono", monospace;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.md-content pre {
+  margin: 12px 0 !important;
+}
+
+/* Code block wrapper with header */
+.code-block-wrapper {
+  margin: 12px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #333;
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a1a;
+  padding: 6px 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: #999;
+}
+
+.code-lang {
+  text-transform: lowercase;
+}
+
+.copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.copy-btn:hover {
+  background: #2b2b2b;
+  color: #f5a623; /* amber accent */
+}
+
+/* Full-message copy button */
+.ai-msg {
+  position: relative;
+}
+
+.msg-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  background: none;
+  border: none;
+  color: #777;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  opacity: 0; /* hidden by default */
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+
+.ai-msg:hover .msg-copy-btn {
+  opacity: 1; /* show on hover, like ChatGPT */
+}
+
+.msg-copy-btn:hover {
+  background: #2b2b2b;
+  color: #f5a623;
+}

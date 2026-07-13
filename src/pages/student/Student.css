@@ -105,10 +105,13 @@
   border-radius: 14px;
   display: flex;
   flex-direction: column;
-  height: 500px;
+  height: 90vh;
   overflow: hidden;
   width: 1000px;
   margin: 0 auto;
+  z-index: 1000;
+  top: 0;
+  position:sticky;
 }
 .chat-topline {
   display: flex;
@@ -126,6 +129,35 @@
   flex-direction: column;
   gap: 14px;
 }
+
+
+/* মোবাইলে আরও কমপ্যাক্ট */
+@media (max-width: 640px) {
+  .chat-shell {
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;      /* ফুল স্ক্রিন অ্যাপ ফিল */
+    border: none;
+    width: 100%;
+  }
+
+  .chat-body {
+    padding: 12px;
+  }
+
+  .chat-topline {
+    padding: 10px 12px;
+  }
+}
+
+/* মিডিয়াম স্ক্রিন (ট্যাবলেট) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .chat-shell {
+    width: 95%;
+    height: 80vh;
+  }
+}
+
 .msg {
   max-width: 82%;
   display: flex;
@@ -144,7 +176,7 @@
   border-radius: 12px;
   font-size: 14px;
   line-height: 1.55;
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
 }
 .msg.bot .msg-bubble {
   background: var(--surface-2);
