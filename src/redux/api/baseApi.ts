@@ -71,7 +71,7 @@ const accessToken: BaseQueryFn<
 // https://redux-toolkit.js.org/rtk-query/overview
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: accessToken,
+  baseQuery: baseQuery,
   tagTypes: ["User", "Student", "Roadmap", "Progress", "Chat"],
   endpoints: () => ({}),
 });

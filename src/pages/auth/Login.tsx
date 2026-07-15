@@ -7,6 +7,7 @@ import "./Auth.css";
 import { useLoginMutation } from "../../redux/api/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { setCredentials } from "../../redux/api/features/auth/authSlice";
+import { loginWithGoogle, signInWithEmailPassword } from "../../firebase/services/firebaseAuth";
 
 export default function Login() {
   const {
@@ -19,18 +20,50 @@ export default function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const [registerUser] = useLoginMutation();
 
-  const onSubmit = async (values:FieldValues) => {
+  const onSubmit = async (values: FieldValues) => {
     try {
-      const res = await login(values).unwrap();
-      dispatch(setCredentials(res));
-      toast.success("Welcome back!");
-      const redirectTo =
-        location.state?.from?.pathname ||
-        (res.user?.role === "admin" ? "/admin" : "/student");
-      navigate(redirectTo, { replace: true });
-    } catch (err:any) {
+      // console.log(values)
+      const { email, name, password } = values;
+      const response = await signInWithEmailPassword(email, password);
+      console.log(response)
+      // const userDate = {
+      //   name: name, // response e name = null
+      //   email: response?.user?.email,
+      //   password: password,
+      // };
+
+      // const res = await login(values).unwrap();
+      // dispatch(setCredentials(res));
+      // toast.success("Welcome back!");
+      // const redirectTo =
+      //   location.state?.from?.pathname ||
+      //   (res.user?.role === "admin" ? "/admin" : "/student");
+      // navigate(redirectTo, { replace: true });
+    } catch (err: any) {
       // apiSlice already toasts the server error message
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    try {
+      const result = await loginWithGoogle(); // pick--> photoURL / displayName / email
+
+      const { photoURL, displayName, email } = result.user;
+
+      const userDate = {
+        name: displayName,
+        email: email,
+        avatar: photoURL,
+      };
+
+      const res = await registerUser(userDate).unwrap();
+      dispatch(setCredentials(res));
+      toast.success("Account created — let's build your roadmap");
+      navigate("/student", { replace: true });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -48,7 +81,10 @@ export default function Login() {
               control={control}
               rules={{
                 required: "Email is required",
-                pattern: { value: /^\S+@\S+\.\S+$/, message: "Enter a valid email" },
+                pattern: {
+                  value: /^\S+@\S+\.\S+$/,
+                  message: "Enter a valid email",
+                },
               }}
               render={({ field }) => (
                 <Input
@@ -59,7 +95,9 @@ export default function Login() {
                 />
               )}
             />
-            {errors.email && <div className="auth-error">{errors.email.message}</div>}
+            {errors.email && (
+              <div className="auth-error">{errors.email.message}</div>
+            )}
           </div>
 
           <div className="auth-field">
@@ -92,6 +130,29 @@ export default function Login() {
           >
             Log in
           </Button>
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: 4,
+              marginTop: "10px",
+            }}
+          >
+            <Button
+              type="default"
+              shape="square"
+              size="large"
+              onClick={handleGoogleSignup}
+              icon={
+                <img
+                  src="https://img.icons8.com/color/48/google-logo.png"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                />
+              }
+            />
+          </span>
         </form>
 
         <div className="auth-footer">

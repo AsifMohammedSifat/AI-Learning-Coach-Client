@@ -48,4 +48,13 @@ export type TSingleMessage = {
   text: string;
 };
 
+export type TUser = {
+  // _id: Types.ObjectId;
+  name: string;
+  email: string;
+  password?: string;
+  avatar?: string;
+};
+
+
 export type TLanguage = "বাংলা" | "EN";

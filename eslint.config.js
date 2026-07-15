@@ -22,6 +22,7 @@ export default defineConfig([
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
       "react-hooks/purity": "warn",
+      "treact-hooks/set-state-in-render": "warn",
     },
   },
 ]);

@@ -1,4 +1,4 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type FieldValues } from "react-hook-form";
 import { Input, Button } from "antd";
 import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import "./Auth.css";
 import { useRegisterMutation } from "../../redux/api/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { setCredentials } from "../../redux/api/features/auth/authSlice";
+import { signUpWithEmailPassword, loginWithGoogle } from "../../firebase/services/firebaseAuth";
 
 export default function Register() {
   const {
@@ -15,21 +16,58 @@ export default function Register() {
     watch,
     formState: { errors },
   } = useForm({
-    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
+    defaultValues: {
+      name: "asif",
+      email: "a@gmail.com",
+      password: "admin123",
+      confirmPassword: "",
+    },
   });
 
   const [registerUser, { isLoading }] = useRegisterMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = async ({ ...values }) => {
+  const onSubmit = async (values: FieldValues) => {
     try {
-      const res = await registerUser({ ...values, role: "student" }).unwrap();
+      // console.log(values); // email, name , password
+      const {email,name,password} = values;
+      const response = await signUpWithEmailPassword(email, password);
+      
+      const userDate = {
+        name: name, // response e name = null
+        email: response?.user?.email, 
+        password: password,
+      };
+
+      const res = await registerUser(userDate).unwrap();
       dispatch(setCredentials(res));
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });
     } catch (err) {
       // apiSlice already toasts the server error message
+      console.log(err)
+    }
+  };
+
+  const handleGoogleSignup = async () => {
+    try {
+      const result = await loginWithGoogle(); // pick--> photoURL / displayName / email
+
+      const { photoURL, displayName, email } = result.user;
+
+      const userDate = {
+        name: displayName,
+        email: email,
+        avatar: photoURL,
+      };
+
+      const res = await registerUser(userDate).unwrap();
+      dispatch(setCredentials(res));
+      toast.success("Account created — let's build your roadmap");
+      navigate("/student", { replace: true });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -145,6 +183,29 @@ export default function Register() {
           >
             Create account
           </Button>
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: 4,
+              marginTop: "10px",
+            }}
+          >
+            <Button
+              type="default"
+              shape="square"
+              size="large"
+              onClick={handleGoogleSignup}
+              icon={
+                <img
+                  src="https://img.icons8.com/color/48/google-logo.png"
+                  alt="Google"
+                  width={20}
+                  height={20}
+                />
+              }
+            />
+          </span>
         </form>
 
         <div className="auth-footer">

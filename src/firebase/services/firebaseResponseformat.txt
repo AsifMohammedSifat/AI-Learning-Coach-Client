@@ -1,0 +1,29 @@
+SignInWithGoogle:
+        // {
+        //     "uid": ,
+        //     "email": "",
+        //     "emailVerified": true,
+        //     "displayName": "Asif Mohammed Sifat",
+        //     "isAnonymous": false,
+        //     "photoURL": ,
+        //     "providerData": [
+        //         {
+        //             "providerId": "google.com",
+        //             "uid": "",
+        //             "displayName": "Asif Mohammed Sifat",
+        //             "email": "@gmail.com",
+        //             "phoneNumber": null,
+        //             "photoURL": ""
+        //         }
+        //     ],
+        //     "stsTokenManager": {
+        //         "refreshToken": "",
+        //         "accessToken": "",
+        //         "expirationTime": 
+        //     },
+        //     "createdAt": "1784114763416",
+        //     "lastLoginAt": "1784114763416",
+        //     "apiKey": "--",
+        //     "appName": "[DEFAULT]"
+        // }
+EmailPassword:
