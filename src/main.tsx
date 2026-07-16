@@ -6,23 +6,26 @@ import "./styles/global.css";
 import { ConfigProvider, theme as antdThemeAlgorithm } from "antd";
 import { antdTheme } from "./styles/theme.ts";
 import { Toaster } from "sonner";
-import { store } from "./redux/store.ts";
+import { persistor, store } from "./redux/store.ts";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <ConfigProvider
-        theme={{
-          algorithm: antdThemeAlgorithm.darkAlgorithm,
-          ...antdTheme,
-        }}
-      >
-        <BrowserRouter>
-          <App />
-          <Toaster theme="dark" position="top-right" richColors closeButton />
-        </BrowserRouter>
-      </ConfigProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ConfigProvider
+          theme={{
+            algorithm: antdThemeAlgorithm.darkAlgorithm,
+            ...antdTheme,
+          }}
+        >
+          <BrowserRouter>
+            <App />
+            <Toaster theme="dark" position="top-right" richColors closeButton />
+          </BrowserRouter>
+        </ConfigProvider>
+      </PersistGate>
     </Provider>
   </StrictMode>,
 );

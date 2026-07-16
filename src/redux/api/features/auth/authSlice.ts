@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../../../store";
-import type { TJwtPayload } from "../../../../type";
+import type { TJwtPayload, TUser } from "../../../../type";
 import { jwtDecode } from "jwt-decode";
 
 type TAuthState = {
-  user: null | TJwtPayload;
+  user: null | TUser;
   accessToken: null | string;
 };
 
@@ -18,21 +18,23 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      const { accessToken, user } = action.payload;
+      console.log(action.payload);
+      const { accessToken, user } = action.payload.data;
       state.accessToken = accessToken;
-
-      if (user) {
-        state.user = user;
-      } else if (accessToken) {
+      // if (user) {
+      //   state.user = user;
+      // } else
+      if (accessToken) {
         try {
           const decoded = jwtDecode<TJwtPayload>(accessToken);
           state.user = {
             userId: decoded.userId,
-            name: decoded.name,
-            email: decoded.email,
+            name: user?.name,
+            email: user?.email,
             role: decoded.role,
-            iat: decoded.iat,
-            exp: decoded.exp,
+            avatar:
+              user?.avatar ??
+              "https://img.icons8.com/?size=100&id=9q3GMpxNIMjC&format=png&color=000000",
           };
         } catch {
           state.user = null;

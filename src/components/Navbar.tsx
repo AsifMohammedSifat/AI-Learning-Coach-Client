@@ -62,16 +62,15 @@
 //   );
 // }
 
-
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button, Drawer, Grid } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-// import { useAppSelector } from "../redux/hooks";
-// import {
-//   selectCurrentUser,
-//   selectIsAuthenticated,
-// } from "../redux/api/features/auth/authSlice";
+import { useAppSelector } from "../redux/hooks";
+import {
+  selectCurrentUser,
+  selectIsAuthenticated,
+} from "../redux/api/features/auth/authSlice";
 
 import "./Navbar.css";
 
@@ -91,12 +90,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   // Replace with Redux later
-  const isAuthenticated = false;
-  // const user = useAppSelector(selectCurrentUser);
-  // const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const user = useAppSelector(selectCurrentUser);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
-  const dashboardPath = "/admin";
-  // const dashboardPath = user?.role === "admin" ? "/admin" : "/student";
+  const dashboardPath = user?.role === "admin" ? "/admin" : "/student";
 
   return (
     <>
@@ -126,22 +123,14 @@ export default function Navbar() {
 
             <div className="site-nav-actions">
               {isAuthenticated ? (
-                <Button
-                  type="primary"
-                  onClick={() => navigate(dashboardPath)}
-                >
+                <Button type="primary" onClick={() => navigate(dashboardPath)}>
                   Dashboard
                 </Button>
               ) : (
                 <>
-                  <Button onClick={() => navigate("/login")}>
-                    Log in
-                  </Button>
+                  <Button onClick={() => navigate("/login")}>Log in</Button>
 
-                  <Button
-                    type="primary"
-                    onClick={() => navigate("/register")}
-                  >
+                  <Button type="primary" onClick={() => navigate("/register")}>
                     Get Started
                   </Button>
                 </>

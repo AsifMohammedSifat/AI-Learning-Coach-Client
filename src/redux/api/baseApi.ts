@@ -28,7 +28,7 @@ const baseQuery = fetchBaseQuery({
 //https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#automatic-re-authorization-by-extending-fetchbasequery
 
 // refresh accessToken jeno behind the scene generate korte pari
-const accessToken: BaseQueryFn<
+const fetchQueryWithRefToken: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -71,7 +71,7 @@ const accessToken: BaseQueryFn<
 // https://redux-toolkit.js.org/rtk-query/overview
 export const baseApi = createApi({
   reducerPath: "baseApi",
-  baseQuery: baseQuery,
+  baseQuery: fetchQueryWithRefToken,
   tagTypes: ["User", "Student", "Roadmap", "Progress", "Chat"],
   endpoints: () => ({}),
 });

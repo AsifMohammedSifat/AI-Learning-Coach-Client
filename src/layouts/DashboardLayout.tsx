@@ -162,8 +162,7 @@ export default function DashboardLayout() {
                 cursor: "pointer",
               }}
             >
-              {/* <Avatar src={user?.avatar} icon={<UserOutlined />} /> */}
-              <Avatar src="User" icon={<UserOutlined />} />
+              <Avatar src={user?.avatar} icon={<UserOutlined />} />
               <div style={{ lineHeight: 1.3 }}>
                 <div style={{ fontSize: 13, fontWeight: 600 }}>
                   {user?.name || "User"}

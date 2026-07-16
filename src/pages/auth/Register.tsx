@@ -41,7 +41,7 @@ export default function Register() {
       };
 
       const res = await registerUser(userDate).unwrap();
-      dispatch(setCredentials(res));
+      dispatch(setCredentials(res)); // accessToken,user(resposne of model)
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });
     } catch (err) {
@@ -63,6 +63,7 @@ export default function Register() {
       };
 
       const res = await registerUser(userDate).unwrap();
+
       dispatch(setCredentials(res));
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });

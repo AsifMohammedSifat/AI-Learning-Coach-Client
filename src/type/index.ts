@@ -12,17 +12,15 @@ export type TRoute = {
 };
 
 export type TUserPaths = {
-    name: string,
-    path?: string,
-    element?: ReactNode,
-    children?: TUserPaths[]
-}
+  name: string;
+  path?: string;
+  element?: ReactNode;
+  children?: TUserPaths[];
+};
 
 export type TJwtPayload = {
   userId: string;
   role: "student" | "admin";
-  name: string;
-  email: string;
   iat?: number;
   exp?: number;
 };
@@ -50,11 +48,12 @@ export type TSingleMessage = {
 
 export type TUser = {
   // _id: Types.ObjectId;
-  name: string;
-  email: string;
+  userId?: string;
+  name?: string;
+  email?: string;
   password?: string;
   avatar?: string;
+  role?: "student" | "admin";
 };
-
 
 export type TLanguage = "বাংলা" | "EN";

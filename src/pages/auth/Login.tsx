@@ -14,35 +14,37 @@ export default function Login() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { email: "a@gmail.com", password: "123" } });
+  } = useForm({ defaultValues: { email: "a@gmail.com", password: "admin123" } });
 
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [registerUser] = useLoginMutation();
+  // const [registerUser] = useLoginMutation();
 
   const onSubmit = async (values: FieldValues) => {
     try {
       // console.log(values)
       const { email, name, password } = values;
       const response = await signInWithEmailPassword(email, password);
-      console.log(response)
-      // const userDate = {
-      //   name: name, // response e name = null
-      //   email: response?.user?.email,
-      //   password: password,
-      // };
+     
+      const userData = {
+        name: name, // response e name = null
+        email: response?.user?.email,
+        password: password,
+      };
 
-      // const res = await login(values).unwrap();
-      // dispatch(setCredentials(res));
-      // toast.success("Welcome back!");
-      // const redirectTo =
-      //   location.state?.from?.pathname ||
-      //   (res.user?.role === "admin" ? "/admin" : "/student");
-      // navigate(redirectTo, { replace: true });
+      const res = await login(userData).unwrap();
+      console.log("login.tsx",res);
+      dispatch(setCredentials(res));
+      toast.success("Welcome back!");
+      const redirectTo =
+        location.state?.from?.pathname ||
+        (res.user?.role === "admin" ? "/admin" : "/student");
+      navigate(redirectTo, { replace: true });
     } catch (err: any) {
       // apiSlice already toasts the server error message
+      console.log(err);
     }
   };
 
@@ -52,13 +54,13 @@ export default function Login() {
 
       const { photoURL, displayName, email } = result.user;
 
-      const userDate = {
+      const userData = {
         name: displayName,
         email: email,
         avatar: photoURL,
       };
 
-      const res = await registerUser(userDate).unwrap();
+      const res = await login(userData).unwrap();
       dispatch(setCredentials(res));
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });
