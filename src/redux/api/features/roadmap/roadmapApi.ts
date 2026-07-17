@@ -5,7 +5,7 @@ export const roadmapApi = baseApi.injectEndpoints({
     generateRoadmap: builder.mutation({
       // body: { goal, currentLevel, hoursPerDay, language }
       query: (body) => ({
-        url: "/roadmap/generate",
+        url: "/roadmap/",
         method: "POST",
         body,
       }),
@@ -16,12 +16,14 @@ export const roadmapApi = baseApi.injectEndpoints({
       providesTags: ["Roadmap"],
     }),
     getRoadmapById: builder.query({
-      query: (id) => `/roadmap/${id}`,
-      providesTags: (result, error, id) => [{ type: "Roadmap", id }],
+      query: (roadmapId) => `/roadmap/${roadmapId}`,
+      providesTags: (result, error, roadmapId) => [
+        { type: "Roadmap", id: roadmapId },
+      ],
     }),
     listRoadmaps: builder.query({
       // admin: list every student's roadmap, optionally filtered
-      query: (params) => ({ url: "/roadmap", params }),
+      query: (params) => ({ url: "/roadmap/", params }),
       providesTags: ["Roadmap"],
     }),
   }),

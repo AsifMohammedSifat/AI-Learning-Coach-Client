@@ -10,6 +10,7 @@ import {
 import type { TLanguage, TMessage } from "../../type";
 import MarkdownMessage from "../../formatter/MarkdownMessage";
 import { Check, Copy } from "lucide-react";
+import TextArea from "antd/es/input/TextArea";
 
 const suggestions = [
   "Binary search vs linear search?",
@@ -26,16 +27,14 @@ export default function ChatTutor() {
   const [messages, setMessages] = useState<TMessage[]>([]);
   const bodyRef = useRef<HTMLDivElement | null>(null);
 
-
   // to add copy button in chat message
   const [copied, setCopied] = useState(false);
 
-  const handleCopyMessage = async (text:string) => {
+  const handleCopyMessage = async (text: string) => {
     await navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
-
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -161,7 +160,7 @@ export default function ChatTutor() {
                   {m.role === "assistant" && (
                     <button
                       className="msg-copy-btn"
-                      onClick={()=>handleCopyMessage(m.text)}
+                      onClick={() => handleCopyMessage(m.text)}
                     >
                       {copied ? (
                         <>
@@ -199,14 +198,29 @@ export default function ChatTutor() {
           ))}
         </div>
 
-        <div className="chat-input-row">
-          <Input
+        <div
+          className="chat-input-row"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {/* <Input
             size="large"
             placeholder="তোমার প্রশ্ন লেখো…"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onPressEnter={() => handleSend()}
+          /> */}
+          <TextArea
+            value={input}
+            placeholder="তোমার প্রশ্ন লেখো…"
+            onChange={(e) => setInput(e.target.value)}
+            autoSize={{ minRows: 3, maxRows: 10 }}
+            onPressEnter={() => handleSend()}
           />
+
           <Button
             type="primary"
             icon={<SendOutlined />}

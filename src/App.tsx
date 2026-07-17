@@ -16,6 +16,7 @@ import Roadmap from "./pages/student/Roadmap";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import StudentManagement from "./pages/admin/StudentManagement";
+import GeneratedRoadMap from "./pages/student/GeneratedRoadmap";
 
 function App() {
   return (
@@ -28,10 +29,12 @@ function App() {
         <Route path="/chat-tutor" element={<ChatTutor />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* <Route path="/plan" element={<GeneratedRoadMap />} /> */}
       </Route>
       <Route path="/unauthorized" element={<Unauthorized />} />
 
-           {/* Authenticated app shell */}
+      {/* Authenticated app shell */}
       {/* <Route element={<ProtectedRoute />}> */}
       <Route>
         <Route element={<DashboardLayout />}>
@@ -42,24 +45,23 @@ function App() {
           <Route>
             <Route path="/student" element={<StudentDashboard />} />
             <Route path="/student/roadmap" element={<Roadmap />} />
+            <Route path="/student/roadmap/me/:roadmapId" element={<GeneratedRoadMap />} />
             <Route path="/student/chat" element={<ChatTutor />} />
             <Route path="/student/progress" element={<Progress />} />
+
+            <Route path="/student/plan" element={<GeneratedRoadMap />} />
           </Route>
 
           {/* Admin-only */}
           {/* <Route element={<ProtectedRoute allowedRoles={["admin"]} />}> */}
-          <Route >
+          <Route>
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/students" element={<StudentManagement />} />
           </Route>
         </Route>
       </Route>
 
-
-      
-
-
-       <Route path="/404" element={<NotFound />} />
+      <Route path="/404" element={<NotFound />} />
       <Route path="*" element={<Navigate to="/404" replace />} />
     </Routes>
   );

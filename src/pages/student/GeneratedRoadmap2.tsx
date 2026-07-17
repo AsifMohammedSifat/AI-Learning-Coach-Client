@@ -7,11 +7,8 @@ import {
   Slider,
   Skeleton,
   Empty,
-  Tag,
-  Collapse,
   AutoComplete,
 } from "antd";
-import { RightOutlined, CheckOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 
 import "./Student.css";
@@ -22,7 +19,6 @@ import {
   useGetMyRoadmapQuery,
 } from "../../redux/api/features/roadmap/roadmapApi";
 import { TECH_STACKS } from "../../utils/techStack";
-import { useNavigate } from "react-router-dom";
 
 const levelOptions = [
   { label: "Complete beginner", value: "beginner" },
@@ -30,18 +26,45 @@ const levelOptions = [
   { label: "Intermediate", value: "intermediate" },
 ];
 
-// const languageOptions = ["C++", "Python", "Java", "JavaScript"];
+// ---- Types (adjust to match your actual roadmap API shape) ----
+type WeekStatus = "done" | "current" | "upcoming" | "locked";
 
-export default function Roadmap() {
+interface Topic {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
+interface Week {
+  id: string;
+  order: number;
+  title: string;
+  status: WeekStatus;
+  topics?: Topic[];
+  estimatedHoursLeft?: number; // shown for the "current" week's time badge
+  resource?: string; // optional suggested resource line
+}
+
+interface RoadmapData {
+  goal: string;
+  language: string;
+  hoursPerDay: number;
+  weeks: Week[];
+}
+
+export default function GeneratedRoadMap() {
   const { data, isLoading, refetch } = useGetMyRoadmapQuery(undefined);
   const [generateRoadmap, { isLoading: isGenerating }] =
     useGenerateRoadmapMutation();
   const [updateProgress] = useUpdateProgressMutation();
   const [showForm, setShowForm] = useState(false);
 
-  const navigate = useNavigate();
+  const roadmap: RoadmapData | undefined = data?.data;
 
-  const roadmap = data?.data;
+  // which week card is expanded — default to whichever is "current"
+  const [expandedWeekId, setExpandedWeekId] = useState<string | null>(
+    () => roadmap?.weeks?.find((w) => w.status === "current")?.id ?? null,
+  );
 
   const { control, handleSubmit } = useForm({
     defaultValues: {
@@ -54,20 +77,10 @@ export default function Roadmap() {
 
   const onSubmit = async (values: FieldValues) => {
     try {
-      console.log(values);
-      const response = await generateRoadmap(values).unwrap();
-      const roadmapId = response?.data?._id;
-      if (!roadmapId) {
-        toast.error(
-          "Roadmap saved but no id was returned — check the API response shape.",
-        );
-        return;
-      }
-
+      await generateRoadmap(values).unwrap();
       toast.success("Roadmap generated");
-      navigate(`me/${roadmapId}`);
-      // setShowForm(false);
-      // refetch(); //  generate korar por ek e page e info dekanor jonne
+      setShowForm(false);
+      refetch();
     } catch {
       // handled globally
     }
@@ -89,10 +102,16 @@ export default function Roadmap() {
     }
   };
 
+  const toggleCard = (week: Week) => {
+    if (week.status === "locked") return; // locked weeks don't expand
+    setExpandedWeekId((prev) => (prev === week.id ? null : week.id));
+  };
+
   if (isLoading) {
     return <Skeleton active paragraph={{ rows: 8 }} />;
   }
 
+  // ---------------- Generator form (unchanged) ----------------
   if (!roadmap || showForm) {
     return (
       <div style={{ maxWidth: 560, margin: "0 auto" }}>
@@ -144,12 +163,7 @@ export default function Roadmap() {
               name="hoursPerDay"
               control={control}
               render={({ field }) => (
-                <Slider
-                  {...field}
-                  min={1}
-                  max={8}
-                  marks={{ 1: "1h", 8: "8h" }}
-                />
+                <Slider {...field} min={1} max={8} marks={{ 1: "1h", 8: "8h" }} />
               )}
             />
           </div>
@@ -164,8 +178,7 @@ export default function Roadmap() {
                 validate: (value) =>
                   TECH_STACKS.some(
                     (item) => item.toLowerCase() === value.trim().toLowerCase(),
-                  ) ||
-                  "Please enter a valid programming language or framework.",
+                  ) || "Please enter a valid programming language or framework.",
               }}
               render={({ field, fieldState }) => (
                 <>
@@ -182,7 +195,6 @@ export default function Roadmap() {
                     onChange={field.onChange}
                     value={field.value}
                   />
-
                   {fieldState.error && (
                     <div style={{ color: "red", marginTop: 4 }}>
                       {fieldState.error.message}
@@ -207,37 +219,26 @@ export default function Roadmap() {
     );
   }
 
+  // ---------------- Result view (matches your HTML mock) ----------------
+  const completedCount = roadmap.weeks.filter((w) => w.status === "done").length;
+  const totalCount = roadmap.weeks.length;
+
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          gap: 12,
-          marginBottom: 24,
-        }}
-      >
+    <div id="rm-result">
+      <button className="backbtn" onClick={() => setShowForm(true)}>
+        ← এডিট করো
+      </button>
+
+      <div className="rm-header">
         <div>
-          <div className="eyebrow">Study plan</div>
-          <h2 style={{ fontSize: 22, fontWeight: 700, margin: 0 }}>
-            {roadmap.goal}
-          </h2>
-          <div
-            style={{ color: "var(--muted)", fontSize: 13, marginTop: 6 }}
-            className="mono"
-          >
-            {roadmap.language} · {roadmap.hoursPerDay}h/day · ~
-            {roadmap.weeks?.length} weeks
+          <div className="rm-goal">{roadmap.goal}</div>
+          <div className="rm-meta">
+            {roadmap.language} &nbsp;·&nbsp; {roadmap.hoursPerDay} ঘন্টা/দিন
+            &nbsp;·&nbsp; আনুমানিক {totalCount} সপ্তাহ
           </div>
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
-          <Tag color="green">
-            {roadmap.weeks?.filter((w: any) => w.status === "done").length}/
-            {roadmap.weeks?.length} complete
-          </Tag>
-          <Button onClick={() => setShowForm(true)}>Regenerate</Button>
+        <div className="badge">
+          {completedCount}/{totalCount} কমপ্লিট
         </div>
       </div>
 
@@ -245,85 +246,88 @@ export default function Roadmap() {
         <Empty description="No weeks in this plan yet" />
       ) : (
         <div className="track">
-          {roadmap.weeks.map((week: any) => (
-            <div className={`node ${week.status}`} key={week.id}>
-              <div className="node-dot">
-                {week.status === "done" ? <CheckOutlined /> : week.order}
-              </div>
-              <Collapse
-                ghost
-                items={[
-                  {
-                    key: week.id,
-                    label: (
-                      <div className="week-card-top">
-                        <div className="week-title">
-                          <span className="week-tag">WK {week.order}</span>
-                          {week.title}
+          {roadmap.weeks.map((week) => {
+            const isOpen = expandedWeekId === week.id;
+            const isLocked = week.status === "locked";
+            const isDone = week.status === "done";
+            const isCurrent = week.status === "current";
+
+            return (
+              <div className={`node ${week.status}`} key={week.id}>
+                <div className="node-dot">
+                  {isDone ? "✓" : isCurrent ? "●" : week.order}
+                </div>
+
+                <div
+                  className={`card ${isOpen ? "open" : ""}`}
+                  onClick={() => toggleCard(week)}
+                  style={{ cursor: isLocked ? "default" : "pointer" }}
+                >
+                  <div className="card-top">
+                    <div className="card-title">
+                      <span className="week-tag">WK {week.order}</span>
+                      {week.title}
+                    </div>
+
+                    {isDone && <div className="card-time">সম্পন্ন</div>}
+
+                    {isCurrent && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div className="card-time">
+                          চলছে
+                          {typeof week.estimatedHoursLeft === "number" &&
+                            ` · ${week.estimatedHoursLeft}ঘ বাকি`}
                         </div>
-                        {week.status === "done" && (
-                          <span
-                            style={{ color: "var(--mint)", fontSize: 12 }}
-                            className="mono"
-                          >
-                            done
-                          </span>
-                        )}
+                        <span className="chev">{isOpen ? "⌄" : "›"}</span>
                       </div>
-                    ),
-                    children: (
+                    )}
+
+                    {!isDone && !isCurrent && !isLocked && (
+                      <span className="chev">{isOpen ? "⌄" : "›"}</span>
+                    )}
+
+                    {isLocked && <div className="card-time">লক করা</div>}
+                  </div>
+
+                  {!isLocked && isOpen && (
+                    <div className="card-body">
                       <div className="topic-list">
-                        {week.topics?.map((t: any) => (
+                        {week.topics?.map((t) => (
                           <div
                             key={t.id}
-                            className="topic-row-inline"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => markTopicDone(week.id, t.id, t.done)}
+                            className="topic"
+                            onClick={(e) => {
+                              e.stopPropagation(); // don't collapse the card
+                              markTopicDone(week.id, t.id, t.done);
+                            }}
+                            style={
+                              t.done
+                                ? { color: "var(--muted)", textDecoration: "line-through" }
+                                : undefined
+                            }
                           >
                             <span
-                              className="checkbox"
+                              className="tdot"
                               style={
                                 t.done
-                                  ? {
-                                      background: "var(--mint)",
-                                      borderColor: "var(--mint)",
-                                      color: "#0d1117",
-                                    }
-                                  : {}
+                                  ? { background: "var(--mint)", borderColor: "var(--mint)" }
+                                  : undefined
                               }
-                            >
-                              {t.done && (
-                                <CheckOutlined style={{ fontSize: 9 }} />
-                              )}
-                            </span>
-                            <span
-                              style={
-                                t.done
-                                  ? {
-                                      color: "var(--muted)",
-                                      textDecoration: "line-through",
-                                    }
-                                  : {}
-                              }
-                            >
-                              {t.text}
-                            </span>
+                            />
+                            {t.text}
                           </div>
                         ))}
                       </div>
-                    ),
-                  },
-                ]}
-                className="week-card"
-                expandIcon={({ isActive }) => (
-                  <RightOutlined
-                    rotate={isActive ? 90 : 0}
-                    style={{ color: "var(--muted)" }}
-                  />
-                )}
-              />
-            </div>
-          ))}
+
+                      {week.resource && (
+                        <div className="res">📺 সাজেস্টেড: {week.resource}</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
