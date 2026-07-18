@@ -88,7 +88,7 @@ export default function MyRoadmapsList() {
                   <Tag
                     color={rm.roadMapStatus === "active" ? "green" : "default"}
                   >
-                    {rm.roadMapStatus}
+                    {rm.roadMapStatus.toUpperCase()}
                   </Tag>
                   <Tag>
                     {completedWeeks}/{totalWeeks} weeks
