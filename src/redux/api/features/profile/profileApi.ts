@@ -27,7 +27,7 @@ export const userApi = baseApi.injectEndpoints({
     }),
     getStudentById: builder.query({
       query: (id) => `/users/students/${id}`,
-      providesTags: (result, error, id) => [{ type: "Student", id }],
+      providesTags: (id) => [{ type: "Student", id }],
     }),
     updateStudentStatus: builder.mutation({
       // body: { status: 'active' | 'suspended' }
@@ -36,7 +36,7 @@ export const userApi = baseApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: (result, error, { id }) => [
+      invalidatesTags: ({ id }) => [
         { type: "Student", id },
         { type: "Student", id: "LIST" },
       ],

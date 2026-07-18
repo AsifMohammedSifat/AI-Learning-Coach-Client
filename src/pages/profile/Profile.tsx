@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Avatar, Button, Card, Divider, Input, Skeleton, Tag } from "antd";
-import { UserOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined,  LockOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 
 
@@ -9,7 +9,6 @@ import "../auth/Auth.css";
 import { useChangePasswordMutation } from "../../redux/api/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { updateUser } from "../../redux/api/features/auth/authSlice";
-import type { TChangePasswordForm, TProfileForm } from "../../type";
 import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "../../redux/api/features/profile/profileApi";
 
 export default function Profile() {

@@ -17,7 +17,7 @@ export const roadmapApi = baseApi.injectEndpoints({
     }),
     getRoadmapById: builder.query({
       query: (roadmapId) => `/roadmap/${roadmapId}`,
-      providesTags: (result, error, roadmapId) => [
+      providesTags: ( roadmapId) => [
         { type: "Roadmap", id: roadmapId },
       ],
     }),

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Input, Button, Segmented, Skeleton } from "antd";
+import {  Button, Segmented, Skeleton } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import "./Student.css";

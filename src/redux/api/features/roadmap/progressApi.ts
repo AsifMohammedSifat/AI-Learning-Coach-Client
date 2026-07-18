@@ -18,7 +18,7 @@ export const progressApi = baseApi.injectEndpoints({
     getStudentProgress: builder.query({
       // admin view of a specific student
       query: (studentId) => `/progress/student/${studentId}`,
-      providesTags: (result, error, studentId) => [{ type: "Progress", id: studentId }],
+      providesTags: (studentId) => [{ type: "Progress", id: studentId }],
     }),
   }),
 });

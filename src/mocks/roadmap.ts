@@ -32,7 +32,7 @@ export const dummyRoadmap: RoadmapData = {
       title: "Binary Search & STL",
       status: "current",
       estimatedHoursLeft: 4,
-      resource: "তোমার নিজের STL প্লেলিস্ট",
+      resource: ["তোমার নিজের STL প্লেলিস্ট"],
       topics: [
         { id: "t5", text: "Binary Search on Answer", done: false },
         { id: "t6", text: "lower_bound / upper_bound", done: false },

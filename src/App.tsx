@@ -36,8 +36,8 @@ function App() {
       <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* Authenticated app shell */}
-      {/* <Route element={<ProtectedRoute />}> */}
-      <Route>
+      <Route element={<ProtectedRoute />}>
+      {/* <Route> */}
         <Route element={<DashboardLayout />}>
           <Route path="/profile" element={<Profile />} />
 

@@ -33,7 +33,7 @@ const levelOptions = [
 // const languageOptions = ["C++", "Python", "Java", "JavaScript"];
 
 export default function Roadmap() {
-  const { data, isLoading, refetch } = useGetMyRoadmapQuery(undefined);
+  const { data, isLoading } = useGetMyRoadmapQuery(undefined);
   const [generateRoadmap, { isLoading: isGenerating }] =
     useGenerateRoadmapMutation();
   const [updateProgress] = useUpdateProgressMutation();

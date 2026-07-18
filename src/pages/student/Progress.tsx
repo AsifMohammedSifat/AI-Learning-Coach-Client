@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { Skeleton, Empty, Button } from "antd";
-import { CheckOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import {
   Chart,

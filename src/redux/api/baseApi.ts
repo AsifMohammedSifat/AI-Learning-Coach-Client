@@ -11,7 +11,7 @@ import type {
 
 // headers e accessToken add korar jonne baseQuery alada korchi
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api/v1",
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api/v1",
   credentials: "include", // cokkie request er sathe patiye dibe
   prepareHeaders: (headers, { getState }) => {
     const accessToken = (getState() as RootState).auth.accessToken;
