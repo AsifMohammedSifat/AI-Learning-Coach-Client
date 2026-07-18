@@ -18,6 +18,7 @@ import {
 import "./Student.css";
 import { useUpdateProgressMutation } from "../../redux/api/features/roadmap/progressApi";
 import { useGetMyRoadmapQuery } from "../../redux/api/features/roadmap/roadmapApi";
+import { toast } from "sonner";
 
 Chart.register(
   PieController,
@@ -119,9 +120,10 @@ export default function Progress() {
     try {
       await updateProgress({ id: item.weekId, topicId: item.id, done: true }).unwrap();
       refetch();
-    } catch {
-      // handled globally
-    }
+    } catch(err:any) {
+          // handled globally
+          toast.error(err?.message);
+        }
   };
 
   // ---- Pie chart data: week status distribution across ALL roadmaps (real counts) ----

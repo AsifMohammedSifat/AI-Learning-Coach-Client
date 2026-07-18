@@ -36,7 +36,7 @@ const fetchQueryWithRefToken: BaseQueryFn<
   let result = await baseQuery(args, api, extraOptions);
   if (result?.error?.status === 401) {
     //* Send Refresh
-    console.log("Sending refresh accessToken");
+    // console.log("Sending refresh accessToken");
 
     const res = await fetch(
        `${import.meta.env.VITE_API_BASE_URL}/auth/refresh-accessToken`,

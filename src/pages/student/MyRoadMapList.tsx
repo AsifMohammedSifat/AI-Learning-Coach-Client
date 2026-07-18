@@ -18,7 +18,7 @@ export default function MyRoadmapsList() {
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useGetMyRoadmapQuery(undefined);
   const roadmaps: RoadmapSummary[] = data?.data ?? [];
-  console.log(roadmaps)
+  // console.log(roadmaps)
 
   if (isLoading) {
     return <Skeleton active paragraph={{ rows: 6 }} />;

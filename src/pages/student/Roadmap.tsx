@@ -54,7 +54,7 @@ export default function Roadmap() {
 
   const onSubmit = async (values: FieldValues) => {
     try {
-      console.log(values);
+      // console.log(values);
       const response = await generateRoadmap(values).unwrap();
       const roadmapId = response?.data?._id;
       if (!roadmapId) {
@@ -68,9 +68,10 @@ export default function Roadmap() {
       navigate(`me/${roadmapId}`);
       // setShowForm(false);
       // refetch(); //  generate korar por ek e page e info dekanor jonne
-    } catch {
-      // handled globally
-    }
+    } catch(err:any) {
+          // handled globally
+          toast.error(err?.message);
+        }
   };
 
   const markTopicDone = async (
@@ -84,9 +85,10 @@ export default function Roadmap() {
         topicId,
         done: !currentlyDone,
       }).unwrap();
-    } catch {
-      // handled globally
-    }
+    } catch(err:any) {
+          // handled globally
+          toast.error(err?.message);
+        }
   };
 
   if (isLoading) {

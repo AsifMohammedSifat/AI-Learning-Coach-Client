@@ -27,8 +27,16 @@ const { useBreakpoint } = Grid;
 const studentItems = [
   { key: "/student", icon: <DashboardOutlined />, label: "Dashboard" },
   { key: "/student/chat", icon: <MessageOutlined />, label: "Chat Tutor" },
-  { key: "/student/roadmap", icon: <ReadOutlined />, label: "Generate Roadmap" },
-  { key: "/student/roadmap/list", icon: <ReadOutlined />, label: "All Roadmap" },
+  {
+    key: "/student/roadmap",
+    icon: <ReadOutlined />,
+    label: "Generate Roadmap",
+  },
+  {
+    key: "/student/roadmap/list",
+    icon: <ReadOutlined />,
+    label: "All Roadmap",
+  },
   { key: "/student/progress", icon: <BarChartOutlined />, label: "Progress" },
   { key: "/profile", icon: <UserOutlined />, label: "Profile" },
 ];
@@ -67,8 +75,11 @@ export default function DashboardLayout() {
   const handleLogout = async () => {
     try {
       await logoutApi().unwrap();
-    } catch {
-      // ignore network errors on logout, clear client state regardless
+    } catch (err: any) {
+      // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
     dispatch(logout());
     toast.success("Logged out");

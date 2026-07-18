@@ -7,14 +7,19 @@ import "./Auth.css";
 import { useLoginMutation } from "../../redux/api/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { setCredentials } from "../../redux/api/features/auth/authSlice";
-import { loginWithGoogle, signInWithEmailPassword } from "../../firebase/services/firebaseAuth";
+import {
+  loginWithGoogle,
+  signInWithEmailPassword,
+} from "../../firebase/services/firebaseAuth";
 
 export default function Login() {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { email: "a@gmail.com", password: "admin123" } });
+  } = useForm({
+    defaultValues: { email: "a@gmail.com", password: "admin123" },
+  });
 
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
@@ -27,7 +32,7 @@ export default function Login() {
       // console.log(values)
       const { email, name, password } = values;
       const response = await signInWithEmailPassword(email, password);
-     
+
       const userData = {
         name: name, // response e name = null
         email: response?.user?.email,
@@ -35,7 +40,7 @@ export default function Login() {
       };
 
       const res = await login(userData).unwrap();
-      console.log("login.tsx",res);
+      // console.log("login.tsx",res);
       dispatch(setCredentials(res));
       toast.success("Welcome back!");
       const redirectTo =
@@ -43,8 +48,10 @@ export default function Login() {
         (res.user?.role === "admin" ? "/admin" : "/student");
       navigate(redirectTo, { replace: true });
     } catch (err: any) {
-      // apiSlice already toasts the server error message
-      console.log(err);
+      // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
@@ -64,8 +71,11 @@ export default function Login() {
       dispatch(setCredentials(res));
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 

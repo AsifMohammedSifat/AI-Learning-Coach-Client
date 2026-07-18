@@ -18,7 +18,6 @@ export const userApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
-    // আপনার existing profileApi.ts এর endpoints ব্লকে যোগ করুন:
     listStudents: builder.query<ListStudentsResponse, ListStudentsParams>({
       query: ({ page, limit, searchTerm }) => ({
         url: "/admin/student-list",
@@ -32,13 +31,13 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: (id) => [{ type: "Student", id }],
     }),
     updateStudentStatus: builder.mutation({
-      // body: { status: 'active' | 'suspended' }
+      // body: { status: 'in-progress' | 'blocked' }
       query: ({ id, ...body }) => ({
         url: `/admin/students/${id}/status`,
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ({ id }) => [
+      invalidatesTags: (_result, _error, { id }) => [
         { type: "Student", id },
         { type: "Student", id: "LIST" },
       ],

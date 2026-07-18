@@ -7,7 +7,10 @@ import "./Auth.css";
 import { useRegisterMutation } from "../../redux/api/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { setCredentials } from "../../redux/api/features/auth/authSlice";
-import { signUpWithEmailPassword, loginWithGoogle } from "../../firebase/services/firebaseAuth";
+import {
+  signUpWithEmailPassword,
+  loginWithGoogle,
+} from "../../firebase/services/firebaseAuth";
 
 export default function Register() {
   const {
@@ -31,12 +34,12 @@ export default function Register() {
   const onSubmit = async (values: FieldValues) => {
     try {
       // console.log(values); // email, name , password
-      const {email,name,password} = values;
+      const { email, name, password } = values;
       const response = await signUpWithEmailPassword(email, password);
-      
+
       const userDate = {
         name: name, // response e name = null
-        email: response?.user?.email, 
+        email: response?.user?.email,
         password: password,
       };
 
@@ -44,9 +47,11 @@ export default function Register() {
       dispatch(setCredentials(res)); // accessToken,user(resposne of model)
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });
-    } catch (err) {
-      // apiSlice already toasts the server error message
-      console.log(err)
+    } catch (err: any) {
+      // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
@@ -67,8 +72,11 @@ export default function Register() {
       dispatch(setCredentials(res));
       toast.success("Account created — let's build your roadmap");
       navigate("/student", { replace: true });
-    } catch (error) {
-      console.log(error);
+    } catch (err: any) {
+      // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 

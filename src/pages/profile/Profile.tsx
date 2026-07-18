@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Avatar, Button, Card, Divider, Input, Skeleton, Tag } from "antd";
-import { UserOutlined,  LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
-
 
 import "../auth/Auth.css";
 import { useChangePasswordMutation } from "../../redux/api/features/auth/authApi";
 import { useAppDispatch } from "../../redux/hooks";
 import { updateUser } from "../../redux/api/features/auth/authSlice";
-import { useGetMyProfileQuery, useUpdateMyProfileMutation } from "../../redux/api/features/profile/profileApi";
+import {
+  useGetMyProfileQuery,
+  useUpdateMyProfileMutation,
+} from "../../redux/api/features/profile/profileApi";
 
 export default function Profile() {
   const { data, isLoading } = useGetMyProfileQuery(undefined);
@@ -49,19 +51,26 @@ export default function Profile() {
       const res = await updateProfile(values).unwrap();
       dispatch(updateUser(res.data));
       toast.success("Profile updated");
-    } catch {
+    } catch (err: any) {
       // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
   const onChangePassword = async (values: any) => {
     try {
+      // console.log(values)
       await changePassword(values).unwrap();
       toast.success("Password changed");
       resetPw();
-    } catch {
-      // handled globally
-    }
+    } catch (err: any) {
+          // handled globally
+          toast.error(err?.data?.message,{
+            position:'top-center'
+          });
+        }
   };
 
   if (isLoading) {
@@ -69,7 +78,7 @@ export default function Profile() {
   }
 
   return (
-    <div style={{ maxWidth: 640 }}>
+    <div style={{ maxWidth: 640, margin: "0 auto" }}>
       <div
         style={{
           display: "flex",
@@ -142,56 +151,58 @@ export default function Profile() {
 
       <Divider />
 
-      <Card title="Change password" className="panel">
-        <form onSubmit={handlePwSubmit(onChangePassword)}>
-          <div style={{ marginBottom: 16 }}>
-            <label className="auth-label">Current password</label>
-            <Controller
-              name="currentPassword"
-              control={pwControl}
-              rules={{ required: "Current password is required" }}
-              render={({ field }) => (
-                <Input.Password
-                  {...field}
-                  size="large"
-                  prefix={<LockOutlined />}
-                />
+      {!profile?.avatar && (
+        <Card title="Change password" className="panel">
+          <form onSubmit={handlePwSubmit(onChangePassword)}>
+            <div style={{ marginBottom: 16 }}>
+              <label className="auth-label">Current password</label>
+              <Controller
+                name="currentPassword"
+                control={pwControl}
+                rules={{ required: "Current password is required" }}
+                render={({ field }) => (
+                  <Input.Password
+                    {...field}
+                    size="large"
+                    prefix={<LockOutlined />}
+                  />
+                )}
+              />
+              {pwErrors.currentPassword && (
+                <div className="auth-error">
+                  {pwErrors.currentPassword.message}
+                </div>
               )}
-            />
-            {pwErrors.currentPassword && (
-              <div className="auth-error">
-                {pwErrors.currentPassword.message}
-              </div>
-            )}
-          </div>
+            </div>
 
-          <div style={{ marginBottom: 16 }}>
-            <label className="auth-label">New password</label>
-            <Controller
-              name="newPassword"
-              control={pwControl}
-              rules={{
-                required: "New password is required",
-                minLength: { value: 6, message: "At least 6 characters" },
-              }}
-              render={({ field }) => (
-                <Input.Password
-                  {...field}
-                  size="large"
-                  prefix={<LockOutlined />}
-                />
+            <div style={{ marginBottom: 16 }}>
+              <label className="auth-label">New password</label>
+              <Controller
+                name="newPassword"
+                control={pwControl}
+                rules={{
+                  required: "New password is required",
+                  minLength: { value: 6, message: "At least 6 characters" },
+                }}
+                render={({ field }) => (
+                  <Input.Password
+                    {...field}
+                    size="large"
+                    prefix={<LockOutlined />}
+                  />
+                )}
+              />
+              {pwErrors.newPassword && (
+                <div className="auth-error">{pwErrors.newPassword.message}</div>
               )}
-            />
-            {pwErrors.newPassword && (
-              <div className="auth-error">{pwErrors.newPassword.message}</div>
-            )}
-          </div>
+            </div>
 
-          <Button htmlType="submit" loading={isChangingPassword}>
-            Update password
-          </Button>
-        </form>
-      </Card>
+            <Button htmlType="submit" loading={isChangingPassword}>
+              Update password
+            </Button>
+          </form>
+        </Card>
+      )}
     </div>
   );
 }

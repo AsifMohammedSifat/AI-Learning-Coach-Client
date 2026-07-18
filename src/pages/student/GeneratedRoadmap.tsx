@@ -7,6 +7,7 @@ import "./Student.css";
 import "../auth/Auth.css";
 import { useUpdateProgressMutation } from "../../redux/api/features/roadmap/progressApi";
 import { useGetRoadmapByIdQuery } from "../../redux/api/features/roadmap/roadmapApi";
+import { toast } from "sonner";
 
 type WeekStatus = "done" | "current" | "upcoming" | "locked";
 
@@ -66,8 +67,11 @@ export default function GeneratedRoadMap() {
         done: !currentlyDone,
       }).unwrap();
       refetch();
-    } catch {
+    } catch (err: any) {
       // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
@@ -88,7 +92,9 @@ export default function GeneratedRoadMap() {
     );
   }
 
-  const completedCount = roadmap.weeks.filter((w) => w.status === "done").length;
+  const completedCount = roadmap.weeks.filter(
+    (w) => w.status === "done",
+  ).length;
   const totalCount = roadmap.weeks.length;
 
   return (
@@ -136,7 +142,13 @@ export default function GeneratedRoadMap() {
                     {isDone && <div className="card-time">সম্পন্ন</div>}
 
                     {isCurrent && (
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
                         <div className="card-time">
                           চলছে
                           {typeof week.estimatedHoursLeft === "number" &&
@@ -192,7 +204,9 @@ export default function GeneratedRoadMap() {
                                   : {}),
                               }}
                             >
-                              {t.done && <CheckOutlined style={{ fontSize: 9 }} />}
+                              {t.done && (
+                                <CheckOutlined style={{ fontSize: 9 }} />
+                              )}
                             </span>
                             <span
                               style={

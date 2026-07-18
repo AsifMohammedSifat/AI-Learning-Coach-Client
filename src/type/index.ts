@@ -56,4 +56,30 @@ export type TUser = {
   role?: "student" | "admin";
 };
 
+export interface ListStudentsParams {
+  page: number;
+  limit: number;
+  searchTerm?: string; // ✅ matches QueryBuilder's expected key (`this.query.searchTerm`), not "search"
+}
+
+export interface ListStudentsResponse {
+  success: boolean;
+  message: string;
+  summary: {
+    totalStudents: number;
+    activeRoadmaps: number;
+    chatMessagesToday: number;
+    avgCompletion: number;
+  };
+  meta: { page: number; limit: number; total: number; totalPage: number };
+  data: {
+    _id: string;
+    name: string;
+    email: string;
+    status: "in-progress" | "blocked";
+    createdAt: string;
+  }[];
+  total?: string;
+}
+
 export type TLanguage = "বাংলা" | "EN";

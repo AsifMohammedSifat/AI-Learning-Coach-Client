@@ -81,8 +81,11 @@ export default function GeneratedRoadMap() {
       toast.success("Roadmap generated");
       setShowForm(false);
       refetch();
-    } catch {
+    } catch (err: any) {
       // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
@@ -97,8 +100,9 @@ export default function GeneratedRoadMap() {
         topicId,
         done: !currentlyDone,
       }).unwrap();
-    } catch {
+    } catch (err: any) {
       // handled globally
+      toast.error(err?.message);
     }
   };
 
@@ -163,7 +167,12 @@ export default function GeneratedRoadMap() {
               name="hoursPerDay"
               control={control}
               render={({ field }) => (
-                <Slider {...field} min={1} max={8} marks={{ 1: "1h", 8: "8h" }} />
+                <Slider
+                  {...field}
+                  min={1}
+                  max={8}
+                  marks={{ 1: "1h", 8: "8h" }}
+                />
               )}
             />
           </div>
@@ -178,7 +187,8 @@ export default function GeneratedRoadMap() {
                 validate: (value) =>
                   TECH_STACKS.some(
                     (item) => item.toLowerCase() === value.trim().toLowerCase(),
-                  ) || "Please enter a valid programming language or framework.",
+                  ) ||
+                  "Please enter a valid programming language or framework.",
               }}
               render={({ field, fieldState }) => (
                 <>
@@ -220,7 +230,9 @@ export default function GeneratedRoadMap() {
   }
 
   // ---------------- Result view (matches your HTML mock) ----------------
-  const completedCount = roadmap.weeks.filter((w) => w.status === "done").length;
+  const completedCount = roadmap.weeks.filter(
+    (w) => w.status === "done",
+  ).length;
   const totalCount = roadmap.weeks.length;
 
   return (
@@ -272,7 +284,13 @@ export default function GeneratedRoadMap() {
                     {isDone && <div className="card-time">সম্পন্ন</div>}
 
                     {isCurrent && (
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
                         <div className="card-time">
                           চলছে
                           {typeof week.estimatedHoursLeft === "number" &&
@@ -302,7 +320,10 @@ export default function GeneratedRoadMap() {
                             }}
                             style={
                               t.done
-                                ? { color: "var(--muted)", textDecoration: "line-through" }
+                                ? {
+                                    color: "var(--muted)",
+                                    textDecoration: "line-through",
+                                  }
                                 : undefined
                             }
                           >
@@ -310,7 +331,10 @@ export default function GeneratedRoadMap() {
                               className="tdot"
                               style={
                                 t.done
-                                  ? { background: "var(--mint)", borderColor: "var(--mint)" }
+                                  ? {
+                                      background: "var(--mint)",
+                                      borderColor: "var(--mint)",
+                                    }
                                   : undefined
                               }
                             />

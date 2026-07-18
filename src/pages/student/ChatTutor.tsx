@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {  Button, Segmented, Skeleton } from "antd";
+import { Button, Segmented, Skeleton } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import "./Student.css";
@@ -81,8 +81,11 @@ export default function ChatTutor() {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
-    } catch {
-      toast.error("Couldn't reach the tutor — try again");
+    } catch (err: any) {
+      // handled globally
+      toast.error(err?.data?.message, {
+        position: "top-center",
+      });
     }
   };
 
