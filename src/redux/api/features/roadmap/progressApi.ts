@@ -9,7 +9,7 @@ export const progressApi = baseApi.injectEndpoints({
     updateProgress: builder.mutation({
       // id = roadmap item / topic id
       query: ({ id, ...body }) => ({
-        url: `/progress/${id}`,
+        url: `/roadmap/week/${id}`,
         method: "PATCH",
         body,
       }),

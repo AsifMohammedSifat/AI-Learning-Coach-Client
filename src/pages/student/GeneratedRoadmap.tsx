@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Skeleton, Empty, Button } from "antd";
+import { CheckOutlined } from "@ant-design/icons";
+import { useParams } from "react-router-dom";
 
 import "./Student.css";
 import "../auth/Auth.css";
 import { useUpdateProgressMutation } from "../../redux/api/features/roadmap/progressApi";
-import { useGetMyRoadmapQuery } from "../../redux/api/features/roadmap/roadmapApi";
-import { dummyRoadmap } from "../../mocks/roadmap";
-import { useParams } from "react-router-dom";
 import { useGetRoadmapByIdQuery } from "../../redux/api/features/roadmap/roadmapApi";
 
 type WeekStatus = "done" | "current" | "upcoming" | "locked";
@@ -23,8 +22,8 @@ interface Week {
   title: string;
   status: WeekStatus;
   topics?: Topic[];
-  estimatedHoursLeft?: number; // shown for the "current" week's time badge
-  resource?: string; // optional suggested resource line
+  estimatedHoursLeft?: number;
+  resource?: string[]; // ✅ was `string` — your real data is an array
 }
 
 export interface RoadmapData {
@@ -36,24 +35,16 @@ export interface RoadmapData {
 }
 
 export default function GeneratedRoadMap() {
-  // const { data, isLoading, isError, refetch } = useGetMyRoadmapQuery(undefined);
-
   const [updateProgress] = useUpdateProgressMutation();
-
   const { roadmapId } = useParams();
 
   const { data, isLoading, isError, refetch } = useGetRoadmapByIdQuery(
     roadmapId!,
-    {
-      skip: !roadmapId,
-    },
+    { skip: !roadmapId },
   );
 
-  console.log("data", data);
   const roadmap: RoadmapData | undefined = data?.data;
-  // const roadmap: RoadmapData | undefined = dummyRoadmap; // TODO: revert to data?.data before commit
 
-  // which week card is expanded — default to whichever is "current"
   const [expandedWeekId, setExpandedWeekId] = useState<string | null>(
     () => roadmap?.weeks?.find((w) => w.status === "current")?.id ?? null,
   );
@@ -64,18 +55,24 @@ export default function GeneratedRoadMap() {
     currentlyDone: boolean,
   ) => {
     try {
+      // Backend re-evaluates the whole week after this: if every topic in
+      // the week is now done, it marks the week "done" and unlocks the
+      // next one — none of that logic lives here on purpose, so refresh
+      // (`refetch`) after the mutation settles to pick up any week/next-
+      // week status changes the server made.
       await updateProgress({
         id: weekId,
         topicId,
         done: !currentlyDone,
       }).unwrap();
+      refetch();
     } catch {
       // handled globally
     }
   };
 
   const toggleCard = (week: Week) => {
-    if (week.status === "locked") return; // locked weeks don't expand
+    if (week.status === "locked") return;
     setExpandedWeekId((prev) => (prev === week.id ? null : week.id));
   };
 
@@ -85,15 +82,13 @@ export default function GeneratedRoadMap() {
 
   if (isError || !roadmap) {
     return (
-      <Empty description="No roadmap found yet" style={{ display: "90vh" }}>
+      <Empty description="No roadmap found yet">
         <Button onClick={() => refetch()}>রিফ্রেশ করো</Button>
       </Empty>
     );
   }
 
-  const completedCount = roadmap.weeks.filter(
-    (w) => w.status === "done",
-  ).length;
+  const completedCount = roadmap.weeks.filter((w) => w.status === "done").length;
   const totalCount = roadmap.weeks.length;
 
   return (
@@ -141,13 +136,7 @@ export default function GeneratedRoadMap() {
                     {isDone && <div className="card-time">সম্পন্ন</div>}
 
                     {isCurrent && (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 8,
-                        }}
-                      >
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <div className="card-time">
                           চলছে
                           {typeof week.estimatedHoursLeft === "number" &&
@@ -170,38 +159,62 @@ export default function GeneratedRoadMap() {
                         {week.topics?.map((t) => (
                           <div
                             key={t.id}
-                            className="topic"
+                            className="topic-row-inline"
                             onClick={(e) => {
-                              e.stopPropagation(); // don't collapse the card
+                              e.stopPropagation();
                               markTopicDone(week.id, t.id, t.done);
                             }}
-                            style={
-                              t.done
-                                ? {
-                                    color: "var(--muted)",
-                                    textDecoration: "line-through",
-                                  }
-                                : undefined
-                            }
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 9,
+                              cursor: "pointer",
+                            }}
                           >
+                            {/* ✅ actual checkbox visual, not just a dot */}
                             <span
-                              className="tdot"
-                              style={
-                                t.done
+                              className="checkbox"
+                              style={{
+                                width: 16,
+                                height: 16,
+                                borderRadius: 4,
+                                border: "1px solid var(--line)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                flexShrink: 0,
+                                ...(t.done
                                   ? {
                                       background: "var(--mint)",
                                       borderColor: "var(--mint)",
+                                      color: "#0d1117",
+                                    }
+                                  : {}),
+                              }}
+                            >
+                              {t.done && <CheckOutlined style={{ fontSize: 9 }} />}
+                            </span>
+                            <span
+                              style={
+                                t.done
+                                  ? {
+                                      color: "var(--muted)",
+                                      textDecoration: "line-through",
                                     }
                                   : undefined
                               }
-                            />
-                            {t.text}
+                            >
+                              {t.text}
+                            </span>
                           </div>
                         ))}
                       </div>
 
-                      {week.resource && (
-                        <div className="res">📺 সাজেস্টেড: {week.resource}</div>
+                      {/* ✅ resource is string[] now — join instead of rendering the array directly */}
+                      {week.resource && week.resource.length > 0 && (
+                        <div className="res">
+                          📺 সাজেস্টেড: {week.resource.join(", ")}
+                        </div>
                       )}
                     </div>
                   )}
