@@ -73,7 +73,8 @@ export default function Login() {
       navigate("/student", { replace: true });
     } catch (err: any) {
       // handled globally
-      toast.error(err?.data?.message, {
+      console.log(err.data.message)
+      toast.error(err?.data?.message || "Something went wrong!", {
         position: "top-center",
       });
     }

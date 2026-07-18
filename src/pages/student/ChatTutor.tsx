@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { Button, Segmented, Skeleton } from "antd";
+import { Button, Segmented } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 import "./Student.css";
-import {
-  useGetChatHistoryQuery,
-  useSendChatMessageMutation,
-} from "../../redux/api/features/chat/chatApi";
+import { useSendChatMessageMutation } from "../../redux/api/features/chat/chatApi";
 import type { TLanguage, TMessage } from "../../type";
 import MarkdownMessage from "../../formatter/MarkdownMessage";
 import { Check, Copy } from "lucide-react";
@@ -19,8 +16,8 @@ const suggestions = [
 ];
 
 export default function ChatTutor() {
-  const { data: historyData, isLoading: loadingHistory } =
-    useGetChatHistoryQuery(undefined);
+  // const { data: historyData, isLoading: loadingHistory } =
+  //   useGetChatHistoryQuery(undefined);
   const [sendMessage, { isLoading: sending }] = useSendChatMessageMutation();
   const [language, setLanguage] = useState<TLanguage>("বাংলা");
   const [input, setInput] = useState("");
@@ -36,10 +33,10 @@ export default function ChatTutor() {
     setTimeout(() => setCopied(false), 1500);
   };
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (historyData?.data) setMessages(historyData.data);
-  }, [historyData]);
+  // useEffect(() => {
+  //   // eslint-disable-next-line react-hooks/set-state-in-effect
+  //   if (historyData?.data) setMessages(historyData.data);
+  // }, [historyData]);
 
   useEffect(() => {
     if (bodyRef.current) {
@@ -138,48 +135,51 @@ export default function ChatTutor() {
         </div>
 
         <div className="chat-body" ref={bodyRef}>
-          {loadingHistory ? (
-            <Skeleton active paragraph={{ rows: 3 }} />
-          ) : messages.length === 0 ? (
-            <div className="msg bot">
-              <div className="msg-bubble">
-                হাই! আমি তোমার AI টিউটর 👋 কোনো প্রশ্ন থাকলে জিজ্ঞেস করো।
-              </div>
-            </div>
-          ) : (
-            messages.map((m) => (
-              <div
-                className={`msg ${m.role === "user" ? "user" : "bot"}`}
-                key={m.id}
-              >
+          {
+            // loadingHistory ? (
+            //   <Skeleton active paragraph={{ rows: 3 }} />
+            // ) :
+            messages.length === 0 ? (
+              <div className="msg bot">
                 <div className="msg-bubble">
-                  {/* <MarkdownMessage message={m.text} /> */}
-                  {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  হাই! আমি তোমার AI টিউটর 👋 কোনো প্রশ্ন থাকলে জিজ্ঞেস করো।
+                </div>
+              </div>
+            ) : (
+              messages.map((m) => (
+                <div
+                  className={`msg ${m.role === "user" ? "user" : "bot"}`}
+                  key={m.id}
+                >
+                  <div className="msg-bubble">
+                    {/* <MarkdownMessage message={m.text} /> */}
+                    {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {m.text}
                   </ReactMarkdown> */}
 
-                  <MarkdownMessage message={m.text} />
+                    <MarkdownMessage message={m.text} />
 
-                  {m.role === "assistant" && (
-                    <button
-                      className="msg-copy-btn"
-                      onClick={() => handleCopyMessage(m.text)}
-                    >
-                      {copied ? (
-                        <>
-                          <Check size={14} /> Copied
-                        </>
-                      ) : (
-                        <>
-                          <Copy size={14} />
-                        </>
-                      )}
-                    </button>
-                  )}
+                    {m.role === "assistant" && (
+                      <button
+                        className="msg-copy-btn"
+                        onClick={() => handleCopyMessage(m.text)}
+                      >
+                        {copied ? (
+                          <>
+                            <Check size={14} /> Copied
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={14} />
+                          </>
+                        )}
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            )
+          }
           {sending && (
             <div className="msg bot">
               <div className="msg-bubble" style={{ padding: "4px 8px" }}>

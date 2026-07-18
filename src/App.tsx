@@ -37,7 +37,7 @@ function App() {
 
       {/* Authenticated app shell */}
       <Route element={<ProtectedRoute />}>
-      {/* <Route> */}
+        {/* <Route> */}
         <Route element={<DashboardLayout />}>
           <Route path="/profile" element={<Profile />} />
 
@@ -47,7 +47,10 @@ function App() {
             <Route path="/student" element={<StudentDashboard />} />
             <Route path="/student/roadmap" element={<Roadmap />} />
             <Route path="/student/roadmap/list" element={<MyRoadmapsList />} />
-            <Route path="/student/roadmap/me/:roadmapId" element={<GeneratedRoadMap />} />
+            <Route
+              path="/student/roadmap/me/:roadmapId"
+              element={<GeneratedRoadMap />}
+            />
             <Route path="/student/chat" element={<ChatTutor />} />
             <Route path="/student/progress" element={<Progress />} />
 
@@ -55,8 +58,8 @@ function App() {
           </Route>
 
           {/* Admin-only */}
-          {/* <Route element={<ProtectedRoute allowedRoles={["admin"]} />}> */}
-          <Route>
+          <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+            {/* <Route> */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/students" element={<StudentManagement />} />
           </Route>

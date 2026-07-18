@@ -11,11 +11,11 @@ export const chatApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Chat"],
     }),
-    getChatHistory: builder.query({
-      query: (params) => ({ url: "/chat/history", params }),
-      providesTags: ["Chat"],
-    }),
+    // getChatHistory: builder.query({
+    //   query: (params) => ({ url: "/chat/history", params }),
+    //   providesTags: ["Chat"],
+    // }),
   }),
 });
 
-export const { useSendChatMessageMutation, useGetChatHistoryQuery } = chatApi;
+export const { useSendChatMessageMutation } = chatApi;
