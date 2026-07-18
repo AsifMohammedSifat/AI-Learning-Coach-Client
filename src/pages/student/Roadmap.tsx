@@ -37,7 +37,7 @@ export default function Roadmap() {
   const [generateRoadmap, { isLoading: isGenerating }] =
     useGenerateRoadmapMutation();
   const [updateProgress] = useUpdateProgressMutation();
-  const [showForm, setShowForm] = useState(false);
+  const [showForm, setShowForm] = useState(true);
 
   const navigate = useNavigate();
 

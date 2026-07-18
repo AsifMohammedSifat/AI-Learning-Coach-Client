@@ -17,6 +17,7 @@ import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import StudentManagement from "./pages/admin/StudentManagement";
 import GeneratedRoadMap from "./pages/student/GeneratedRoadmap";
+import MyRoadmapsList from "./pages/student/MyRoadMapList";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route>
             <Route path="/student" element={<StudentDashboard />} />
             <Route path="/student/roadmap" element={<Roadmap />} />
+            <Route path="/student/roadmap/list" element={<MyRoadmapsList />} />
             <Route path="/student/roadmap/me/:roadmapId" element={<GeneratedRoadMap />} />
             <Route path="/student/chat" element={<ChatTutor />} />
             <Route path="/student/progress" element={<Progress />} />

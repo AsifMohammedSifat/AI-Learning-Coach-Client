@@ -26,8 +26,9 @@ const { useBreakpoint } = Grid;
 
 const studentItems = [
   { key: "/student", icon: <DashboardOutlined />, label: "Dashboard" },
-  { key: "/student/roadmap", icon: <ReadOutlined />, label: "Study Plan" },
   { key: "/student/chat", icon: <MessageOutlined />, label: "Chat Tutor" },
+  { key: "/student/roadmap", icon: <ReadOutlined />, label: "Generate Roadmap" },
+  { key: "/student/roadmap/list", icon: <ReadOutlined />, label: "All Roadmap" },
   { key: "/student/progress", icon: <BarChartOutlined />, label: "Progress" },
   { key: "/profile", icon: <UserOutlined />, label: "Profile" },
 ];
