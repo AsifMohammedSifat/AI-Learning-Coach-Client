@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../hooks/hooks";
 import {
   selectIsAuthenticated,
   selectUserRole,
@@ -24,7 +24,8 @@ export default function ProtectedRoute({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(role!)) { // role undefined hobe na
+  if (allowedRoles && !allowedRoles.includes(role!)) {
+    // role undefined hobe na
     return <Navigate to="/unauthorized" replace />;
   }
 

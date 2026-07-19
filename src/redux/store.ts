@@ -13,6 +13,7 @@ import {
 } from "redux-persist";
 // import storage from "redux-persist/lib/storage";
 import storageModule from "redux-persist/lib/storage";
+import { rtkQueryErrorLogger } from "../middleware/rtkQueryErrorLogger";
 
 const storage = (storageModule as any).default ?? storageModule;
 
@@ -38,7 +39,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER], // to solve non serialize error
       },
-    }).concat(baseApi.middleware),
+    }).concat(baseApi.middleware, rtkQueryErrorLogger),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

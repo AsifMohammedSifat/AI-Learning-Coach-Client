@@ -18,6 +18,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import StudentManagement from "./pages/admin/StudentManagement";
 import GeneratedRoadMap from "./pages/student/GeneratedRoadmap";
 import MyRoadmapsList from "./pages/student/MyRoadMapList";
+// import Support from "./pages/support/Support";
+import ForgotPassword from "./pages/auth/ForgetPassword";
 
 function App() {
   return (
@@ -34,6 +36,7 @@ function App() {
         {/* <Route path="/plan" element={<GeneratedRoadMap />} /> */}
       </Route>
       <Route path="/unauthorized" element={<Unauthorized />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Authenticated app shell */}
       <Route element={<ProtectedRoute />}>

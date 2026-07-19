@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import "./Auth.css";
 import { useRegisterMutation } from "../../redux/api/features/auth/authApi";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { setCredentials } from "../../redux/api/features/auth/authSlice";
 import {
   signUpWithEmailPassword,

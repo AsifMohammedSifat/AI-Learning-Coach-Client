@@ -1,17 +1,17 @@
 import { Controller, useForm, type FieldValues } from "react-hook-form";
-import { Input, Button } from "antd";
+import { Input, Button, Modal } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import "./Auth.css";
 import { useLoginMutation } from "../../redux/api/features/auth/authApi";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { setCredentials } from "../../redux/api/features/auth/authSlice";
 import {
   loginWithGoogle,
   signInWithEmailPassword,
 } from "../../firebase/services/firebaseAuth";
-
+import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
 export default function Login() {
   const {
     control,
@@ -29,7 +29,6 @@ export default function Login() {
 
   const onSubmit = async (values: FieldValues) => {
     try {
-      // console.log(values)
       const { email, name, password } = values;
       const response = await signInWithEmailPassword(email, password);
 
@@ -40,7 +39,6 @@ export default function Login() {
       };
 
       const res = await login(userData).unwrap();
-      // console.log("login.tsx",res);
       dispatch(setCredentials(res));
       toast.success("Welcome back!");
       const redirectTo =
@@ -48,9 +46,10 @@ export default function Login() {
         (res.user?.role === "admin" ? "/admin" : "/student");
       navigate(redirectTo, { replace: true });
     } catch (err: any) {
-      // handled globally
-      toast.error(err?.data?.message, {
-        position: "top-center",
+      Modal.error({
+        title: "Login Failed",
+        content: getFirebaseErrorMessage(err),
+        centered: true,
       });
     }
   };
@@ -73,7 +72,6 @@ export default function Login() {
       navigate("/student", { replace: true });
     } catch (err: any) {
       // handled globally
-      console.log(err.data.message)
       toast.error(err?.data?.message || "Something went wrong!", {
         position: "top-center",
       });
@@ -170,6 +168,10 @@ export default function Login() {
 
         <div className="auth-footer">
           No account yet? <Link to="/register">Create one</Link>
+        </div>
+        <div className="auth-footer">
+          Can't remember your password?{" "}
+          <Link to="/forgot-password">click Forget Password</Link>
         </div>
       </div>
     </div>

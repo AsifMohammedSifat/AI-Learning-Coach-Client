@@ -89,6 +89,8 @@ a {
   animation: pulse 2s infinite;
   display: inline-block;
 }
+
+
 @keyframes pulse {
   0%,
   100% {

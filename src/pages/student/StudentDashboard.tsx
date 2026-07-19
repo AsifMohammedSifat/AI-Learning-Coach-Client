@@ -6,17 +6,17 @@ import {
   BarChartOutlined,
 } from "@ant-design/icons";
 import { useGetMyRoadmapQuery } from "../../redux/api/features/roadmap/roadmapApi";
-import { useGetMyProgressQuery } from "../../redux/api/features/roadmap/progressApi";
+// import { useGetMyProgressQuery } from "../../redux/api/features/roadmap/progressApi";
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
   const { data: roadmapData, isLoading: loadingRoadmap } =
     useGetMyRoadmapQuery(undefined);
-  const { data: progressData, isLoading: loadingProgress } =
-    useGetMyProgressQuery(undefined);
+  // const { data: progressData, isLoading: loadingProgress } =
+  //   useGetMyProgressQuery(undefined);
 
   const roadmap = roadmapData?.data;
-  const progress = progressData?.data;
+  const progress = roadmap;
 
   const cards = [
     {
@@ -54,7 +54,7 @@ export default function StudentDashboard() {
         Pick up where you left off, or start something new.
       </p>
 
-      {loadingRoadmap || loadingProgress ? (
+      {loadingRoadmap? (
         <Skeleton active paragraph={{ rows: 4 }} />
       ) : (
         <Row gutter={[16, 16]}>

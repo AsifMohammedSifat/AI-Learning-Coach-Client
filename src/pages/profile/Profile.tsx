@@ -1,22 +1,33 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Avatar, Button, Card, Divider, Input, Skeleton, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  Input,
+  Modal,
+  Skeleton,
+  Tag,
+} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { toast } from "sonner";
 
 import "../auth/Auth.css";
 import { useChangePasswordMutation } from "../../redux/api/features/auth/authApi";
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import { updateUser } from "../../redux/api/features/auth/authSlice";
 import {
   useGetMyProfileQuery,
   useUpdateMyProfileMutation,
 } from "../../redux/api/features/profile/profileApi";
+import { changePassword } from "../../firebase/services/firebaseAuth";
+import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
 
 export default function Profile() {
   const { data, isLoading } = useGetMyProfileQuery(undefined);
   const [updateProfile, { isLoading: isSaving }] = useUpdateMyProfileMutation();
-  const [changePassword, { isLoading: isChangingPassword }] =
+  const [verifyUser, { isLoading: isChangingPassword }] =
     useChangePasswordMutation();
   const dispatch = useAppDispatch();
 
@@ -62,15 +73,20 @@ export default function Profile() {
   const onChangePassword = async (values: any) => {
     try {
       // console.log(values)
-      await changePassword(values).unwrap();
+
+      // here just checking user exist or blocked or not
+      await verifyUser(values).unwrap();
+      await changePassword(values.currentPassword, values.newPassword);
       toast.success("Password changed");
       resetPw();
     } catch (err: any) {
-          // handled globally
-          toast.error(err?.data?.message,{
-            position:'top-center'
-          });
-        }
+      // handled globally
+      Modal.error({
+        title: "Update Failed",
+        content: getFirebaseErrorMessage(err),
+        centered: true,
+      });
+    }
   };
 
   if (isLoading) {

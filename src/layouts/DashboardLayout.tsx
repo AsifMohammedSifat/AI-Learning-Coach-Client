@@ -13,7 +13,7 @@ import {
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
 import { toast } from "sonner";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import {
   logout,
   selectCurrentUser,

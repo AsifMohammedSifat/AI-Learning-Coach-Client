@@ -66,7 +66,7 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button, Drawer, Grid } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import { useAppSelector } from "../redux/hooks";
+import { useAppSelector } from "../hooks/hooks";
 import {
   selectCurrentUser,
   selectIsAuthenticated,
@@ -81,6 +81,7 @@ const links = [
   { to: "/about", label: "About" },
   { to: "/features", label: "Features" },
   { to: "/chat-tutor", label: "AI Chat Tutor" },
+  { to: "/support", label: "Talk Astro" },
 ];
 
 export default function Navbar() {
