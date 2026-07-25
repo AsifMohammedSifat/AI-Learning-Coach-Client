@@ -81,11 +81,7 @@ export default function Profile() {
       resetPw();
     } catch (err: any) {
       // handled globally
-      Modal.error({
-        title: "Update Failed",
-        content: getFirebaseErrorMessage(err),
-        centered: true,
-      });
+      toast.error("Update failed!");  
     }
   };
 

@@ -11,14 +11,14 @@ import {
   loginWithGoogle,
   signInWithEmailPassword,
 } from "../../firebase/services/firebaseAuth";
-import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
+// import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
 export default function Login() {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: { email: "a@gmail.com", password: "admin123" },
+    defaultValues: { email: "", password: "" },
   });
 
   const [login, { isLoading }] = useLoginMutation();
@@ -46,11 +46,7 @@ export default function Login() {
         (res.user?.role === "admin" ? "/admin" : "/student");
       navigate(redirectTo, { replace: true });
     } catch (err: any) {
-      Modal.error({
-        title: "Login Failed",
-        content: getFirebaseErrorMessage(err),
-        centered: true,
-      });
+      toast.error("Login Failed");
     }
   };
 
@@ -83,6 +79,18 @@ export default function Login() {
       <div className="auth-card">
         <div className="auth-title">Log in</div>
         <div className="auth-sub">Continue your learning roadmap.</div>
+
+        <div>
+          <div className="auth-footer">
+            <Link
+              target="_blank"
+              to="https://docs.google.com/document/d/1XfEfacY06RRH2LNBv4V_kCZGz2Y2q4RHFcNa1jAYgr0/edit?usp=sharing"
+            >
+              {" "}
+              Demo Credentials (Admin & User Access)
+            </Link>
+          </div>
+        </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="auth-field">

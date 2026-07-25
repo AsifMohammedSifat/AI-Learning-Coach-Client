@@ -26,11 +26,7 @@ export default function ForgotPassword() {
       setSent(true);
       toast.success("Reset link sent! Check your inbox.");
     } catch (err: any) {
-      Modal.error({
-        title: "Couldn't send reset link",
-        content: getFirebaseErrorMessage(err),
-        centered: true,
-      });
+      toast.error("Couldn't send reset link");      
     } finally {
       setLoading(false);
     }

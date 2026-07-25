@@ -20,9 +20,9 @@ export default function Register() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: "asif",
-      email: "a@gmail.com",
-      password: "admin123",
+      name: "",
+      email: "",
+      password: "",
       confirmPassword: "",
     },
   });
@@ -86,6 +86,18 @@ export default function Register() {
         <div className="auth-title">Create your account</div>
         <div className="auth-sub">
           Start with a plan built around your goal.
+        </div>
+
+        <div>
+          <div className="auth-footer">
+            <Link
+              target="_blank"
+              to="https://docs.google.com/document/d/1XfEfacY06RRH2LNBv4V_kCZGz2Y2q4RHFcNa1jAYgr0/edit?usp=sharing"
+            >
+              {" "}
+              Demo Credentials (Admin & User Access)
+            </Link>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
