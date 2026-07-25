@@ -1,5 +1,5 @@
 import { Controller, useForm, type FieldValues } from "react-hook-form";
-import { Input, Button, Modal } from "antd";
+import { Input, Button } from "antd";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -180,6 +180,9 @@ export default function Login() {
         <div className="auth-footer">
           Can't remember your password?{" "}
           <Link to="/forgot-password">click Forget Password</Link>
+        </div>
+         <div className="auth-footer">
+          <Link to="/">Back to Home</Link>
         </div>
       </div>
     </div>

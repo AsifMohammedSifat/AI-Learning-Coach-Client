@@ -89,6 +89,7 @@ export default function DashboardLayout() {
   const userMenu: MenuProps = {
     items: [
       { key: "profile", icon: <UserOutlined />, label: "Profile" },
+      { key: "/", icon: <UserOutlined />, label: "Home" },
       {
         key: "logout",
         icon: <LogoutOutlined />,
@@ -98,6 +99,7 @@ export default function DashboardLayout() {
     ],
     onClick: ({ key }) => {
       if (key === "profile") navigate("/profile");
+      if (key === "/") navigate("/");
       if (key === "logout") handleLogout();
     },
   };
@@ -124,7 +126,9 @@ export default function DashboardLayout() {
             whiteSpace: "nowrap",
             overflow: "hidden",
             color: "var(--text)",
+            cursor:"pointer"
           }}
+          onClick={() => navigate("/")}
         >
           <span
             style={{

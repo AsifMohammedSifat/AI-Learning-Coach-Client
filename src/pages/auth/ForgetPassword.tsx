@@ -1,11 +1,11 @@
 import { Controller, useForm, type FieldValues } from "react-hook-form";
-import { Input, Button, Modal } from "antd";
+import { Input, Button } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import "./Auth.css";
 import { resetPassword } from "../../firebase/services/firebaseAuth";
-import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
+// import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
 import { useState } from "react";
 
 export default function ForgotPassword() {

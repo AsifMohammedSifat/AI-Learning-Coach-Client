@@ -39,7 +39,7 @@ const fetchQueryWithRefToken: BaseQueryFn<
     // console.log("Sending refresh accessToken");
 
     const res = await fetch(
-       `${import.meta.env.VITE_API_BASE_URL}/auth/refresh-accessToken`,
+       `${import.meta.env.VITE_API_BASE_URL}/auth/refresh-token`,
       {
         method: "POST",
         credentials: "include",

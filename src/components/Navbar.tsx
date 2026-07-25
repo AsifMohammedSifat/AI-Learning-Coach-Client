@@ -98,8 +98,8 @@ export default function Navbar() {
   return (
     <>
       <nav className="site-nav">
-        <div className="site-nav-brand" onClick={() => navigate("/")}>
-          <span className="site-nav-dot" />
+        <div className="site-nav-brand">
+          <span className="site-nav-dot"  onClick={() => navigate("/")}/>
           AI Learning Coach
         </div>
 

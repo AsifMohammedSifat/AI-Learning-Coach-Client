@@ -6,7 +6,6 @@ import {
   Card,
   Divider,
   Input,
-  Modal,
   Skeleton,
   Tag,
 } from "antd";
@@ -22,7 +21,7 @@ import {
   useUpdateMyProfileMutation,
 } from "../../redux/api/features/profile/profileApi";
 import { changePassword } from "../../firebase/services/firebaseAuth";
-import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
+// import { getFirebaseErrorMessage } from "../../utils/getFirebaseErrorMessage";
 
 export default function Profile() {
   const { data, isLoading } = useGetMyProfileQuery(undefined);
