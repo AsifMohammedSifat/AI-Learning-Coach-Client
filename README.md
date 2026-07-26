@@ -18,7 +18,7 @@ flowchart LR
 User((Student))
 
 subgraph Frontend
-Next[Next.js]
+
 Form[Roadmap Form]
 Redux[Redux Toolkit]
 RTK[RTK Query]
