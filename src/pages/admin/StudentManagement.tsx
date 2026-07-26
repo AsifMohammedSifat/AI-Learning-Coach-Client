@@ -60,7 +60,7 @@ export default function StudentManagement() {
       );
     } catch (err: any) {
       // handled globally
-      toast.error(err?.data?.message, {
+      toast.error(err?.data?.message || "Something went wrong", {
         position: "top-center",
       });
     }
@@ -72,7 +72,7 @@ export default function StudentManagement() {
       toast.success(`${record.name} removed`);
     } catch (err: any) {
       // handled globally
-      toast.error(err?.data?.message, {
+      toast.error(err?.data?.message || "Something went wrong", {
         position: "top-center",
       });
     }

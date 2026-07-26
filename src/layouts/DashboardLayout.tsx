@@ -77,7 +77,7 @@ export default function DashboardLayout() {
       await logoutApi().unwrap();
     } catch (err: any) {
       // handled globally
-      toast.error(err?.data?.message, {
+      toast.error(err?.data?.message || "Something went wrong", {
         position: "top-center",
       });
     }

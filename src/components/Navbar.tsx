@@ -80,7 +80,8 @@ const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/features", label: "Features" },
-  { to: "/chat-tutor", label: "AI Chat Tutor" }
+  { to: "/chat-tutor", label: "Chat Tutor" },
+  { to: "/student/roadmap", label: "AI RoadMap" },
 ];
 
 export default function Navbar() {

@@ -49,7 +49,7 @@ export default function Register() {
       navigate("/student", { replace: true });
     } catch (err: any) {
       // handled globally
-      toast.error(err?.data?.message, {
+      toast.error(err?.data?.message || "Something went wrong", {
         position: "top-center",
       });
     }
@@ -74,7 +74,7 @@ export default function Register() {
       navigate("/student", { replace: true });
     } catch (err: any) {
       // handled globally
-      toast.error(err?.data?.message, {
+      toast.error(err?.data?.message || "Something went wrong", {
         position: "top-center",
       });
     }
